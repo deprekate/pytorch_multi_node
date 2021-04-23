@@ -140,17 +140,18 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--local_rank", type=int)
 	args = parser.parse_args()
+	#change size to number of workers
 	size = 1
-	processes = []
+	init_processes(args.local_rank, size, run)
+
 	'''
+	# this is to run on a single node for testing
+	processes = []
 	for rank in range(size):
 		p = Process(target=init_processes, args=(rank, size, run))
 		p.start()
 		processes.append(p)
+	for p in processes:
+		p.join()
 	'''
-	init_processes(args.local_rank, size, run)
-	#p = Process(target=init_processes, args=(args.local_rank, size, run))
-	#p.start()
 
-	#for p in processes:
-	#	p.join()
